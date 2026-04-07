@@ -4,7 +4,9 @@ Hệ thống knowledge base cá nhân hoàn toàn tự động, vận hành bở
 
 LLM tự tìm nguồn, tự tổng hợp thành wiki có cấu trúc, tự duy trì cross-references, phát hiện mâu thuẫn, và giữ mọi thứ cập nhật — bạn chỉ cần đọc và hỏi.
 
-> **Lưu ý:** Hiện tại hệ thống chỉ hỗ trợ [Claude Code](https://claude.ai/code) (Anthropic) làm engine. Cần có Claude Code CLI hoặc VS Code extension để sử dụng.
+> **Hỗ trợ:** [Claude Code](https://claude.ai/code) | [Antigravity](https://antigravity.codes) / Codex | [GitHub Copilot](https://github.com/features/copilot)
+>
+> Mỗi tool tự đọc file config riêng: `CLAUDE.md` | `AGENTS.md` | `.github/copilot-instructions.md` — cùng nội dung, không conflict.
 
 ## Khác gì so với RAG?
 
@@ -44,12 +46,49 @@ topics:
 
 ### 3. Chạy
 
+Tùy tool bạn dùng:
+
+**Claude Code** (slash command):
 ```bash
-# Trong Claude Code hoặc VS Code có Claude Code extension:
-/llm-wiki run          # Chạy full cycle: discover → ingest → lint
-/llm-wiki status       # Xem trạng thái wiki
+/llm-wiki run          # Chạy full cycle
 /llm-wiki query "..."  # Hỏi đáp
+/llm-wiki status       # Xem trạng thái
 ```
+
+**Antigravity** (slash command hoặc chat):
+```
+@llm-wiki run
+# hoặc chat: "chạy llm-wiki full cycle"
+```
+
+**GitHub Copilot** (chat tự nhiên — tự đọc .github/copilot-instructions.md):
+```
+"Đọc CLAUDE.md rồi chạy discover, ingest, lint cho wiki này"
+"Tìm nguồn mới về AI agents rồi tổng hợp vào wiki"
+"Hỏi dựa trên wiki: so sánh RAG vs LLM Wiki"
+```
+
+**Codex CLI**:
+```bash
+codex "Đọc AGENTS.md và chạy full cycle: discover → ingest → lint"
+```
+
+**Cursor** (chat trong IDE):
+```
+"Follow AGENTS.md. Chạy discover tìm nguồn mới, ingest vào wiki, rồi lint kiểm tra"
+```
+
+### Tóm tắt cách gọi theo tool
+
+| Tool | Cách gọi | File config | Cài skill |
+|------|----------|-------------|-----------|
+| Claude Code | `/llm-wiki run` | `CLAUDE.md` | `cp -r skills/llm-wiki ~/.claude/skills/` |
+| Antigravity | `@llm-wiki run` | `AGENTS.md` | `cp -r skills/llm-wiki ~/.antigravity/skills/` |
+| GitHub Copilot | Chat tự nhiên | `.github/copilot-instructions.md` | Không cần — tự đọc khi mở project |
+| Codex CLI | `codex "..."` | `AGENTS.md` | Không cần — đọc AGENTS.md ở root |
+| Cursor | Chat trong IDE | `AGENTS.md` hoặc `.cursorrules` | Không cần — đọc AGENTS.md ở root |
+
+> **Lưu ý:** Chỉ Claude Code và Antigravity có slash command (`/llm-wiki`). Các tool khác bạn chat bằng ngôn ngữ tự nhiên — LLM sẽ đọc file config và thực hiện theo quy tắc trong đó.
 
 ### 4. Xem wiki
 
@@ -142,7 +181,10 @@ Sau đó chạy `/llm-wiki ingest`.
 
 ```
 llm-wiki/
-├── CLAUDE.md              ← Schema & quy tắc cho LLM
+├── CLAUDE.md              ← Schema cho Claude Code
+├── AGENTS.md              ← Schema cho Antigravity / Codex
+├── .github/
+│   └── copilot-instructions.md  ← Schema cho GitHub Copilot
 ├── config.yaml            ← Cấu hình chủ đề, nguồn, lịch chạy
 ├── config.example.yaml    ← File mẫu cho người dùng mới
 ├── wiki-viewer.html       ← Trình xem wiki (mobile-first, dark theme, graph)
