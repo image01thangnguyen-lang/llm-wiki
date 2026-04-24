@@ -54,3 +54,10 @@ view-graph.html
 
 # User's personal config (use config.example.yaml as template)
 config.yaml
+
+# Next.js build
+.next/
+
+# Local env
+.env.local
+.env*.local

@@ -1,0 +1,19 @@
+{
+  "name": "llm-wiki-vercel",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "sync:firebase": "node scripts/sync-wiki-to-firestore.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "gray-matter": "^4.0.3",
+    "next": "14.2.29",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

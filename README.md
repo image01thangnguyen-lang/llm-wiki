@@ -10,6 +10,45 @@ You just read and ask questions.
 
 ---
 
+
+## Deploy trên Vercel + Firebase (Firestore)
+
+Repo đã được bổ sung một Next.js app để chạy ổn định trên Vercel và dùng Firestore làm database cho viewer.
+
+### 1) Cài dependencies
+```bash
+npm install
+```
+
+### 2) Tạo biến môi trường
+Copy `.env.example` thành `.env.local` và điền thông tin service account Firebase Admin:
+
+```bash
+cp .env.example .env.local
+```
+
+### 3) Đồng bộ dữ liệu wiki vào Firestore
+```bash
+npm run sync:firebase
+```
+
+### 4) Chạy local
+```bash
+npm run dev
+```
+
+### 5) Deploy Vercel
+- Import repo vào Vercel (framework tự nhận diện là Next.js).
+- Thêm toàn bộ biến `FIREBASE_*` và `FIRESTORE_COLLECTION` trong Project Settings.
+- Deploy.
+
+API health check sau khi deploy:
+- `GET /api/health` → trả về mode `firebase` nếu kết nối DB thành công.
+- `GET /api/pages` → trả về toàn bộ wiki pages theo nguồn dữ liệu hiện tại (firebase hoặc fallback).
+
+> Cơ chế an toàn: nếu thiếu biến môi trường hoặc Firestore chưa có dữ liệu, app sẽ tự fallback đọc trực tiếp từ thư mục `wiki/` để không bị trắng trang.
+
+
 ## Why not just use RAG?
 
 | | Traditional RAG | LLM Wiki |
